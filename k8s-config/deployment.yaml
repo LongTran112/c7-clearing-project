@@ -4,7 +4,7 @@ metadata:
   name: trade-engine
   namespace: default
 spec:
-  replicas: 1 # We start with 1 instance
+  replicas: 1 
   selector:
     matchLabels:
       app: trade-engine
@@ -15,7 +15,6 @@ spec:
     spec:
       containers:
       - name: trade-engine
-        # THIS IS YOUR IMAGE FROM PHASE 3
         image: longtran112/trade-engine:v1
         imagePullPolicy: Always
         ports:

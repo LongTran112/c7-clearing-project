@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: trade-engine-monitor
+  namespace: monitoring       # where prometheus is running
+  labels:
+    release: main-monitoring  # links it to Helm installation
+spec:
+  selector:
+    matchLabels:
+      app: trade-engine       # <--- MATCHES Service's selector
+  endpoints:
+    - port: http              # <--- MATCHES the 'name: http' in Service.yaml
+      path: /actuator/prometheus
+      interval: 15s
+  namespaceSelector:
+    matchNames:
+      - default              

@@ -14,20 +14,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/clearing")
 public class ClearingController {
 
-    private final Counter clearRequests; // Prometheus Metric
+    private final Counter clearRequests; 
     private final ClearingService clearingService;
 
     public ClearingController(MeterRegistry registry, ClearingService clearingService) {
-        // This hits the "Prometheus" requirement
         this.clearRequests = registry.counter("clearing_trades_total");
         this.clearingService = clearingService;
     }
 
     @PostMapping("/submit")
     public ResponseEntity<TradeTransaction> clearTrade(@RequestBody TradeTransaction trade) {
-        // Delegate to service layer
         TradeTransaction clearedTrade = clearingService.clearTrade(trade);
-        clearRequests.increment(); // Count the trade for monitoring
+        clearRequests.increment(); 
         return ResponseEntity.ok(clearedTrade);
     }
 }

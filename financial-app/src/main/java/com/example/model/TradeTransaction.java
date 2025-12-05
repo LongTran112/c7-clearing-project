@@ -10,11 +10,10 @@ public class TradeTransaction {
 
     private double price;
 
-    private String marketType; // "CASH" or "REPO" (Keywords from JD!)
+    private String marketType; 
 
     private String status;
 
-    // Constructors
     public TradeTransaction() {
     }
 
@@ -27,7 +26,6 @@ public class TradeTransaction {
         this.status = status;
     }
 
-    // Getters and Setters
     public String getId() {
         return id;
     }
