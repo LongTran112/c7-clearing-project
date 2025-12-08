@@ -1,0 +1,62 @@
+{{- if .Values.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.app.name }}-ingress
+  namespace: {{ .Values.deployment.namespace }}
+  annotations:
+    {{- if .Values.ingress.rateLimit.enabled }}
+    {{- if eq .Values.ingress.className "nginx" }}
+    # nginx rate limiting
+    nginx.ingress.kubernetes.io/limit-rps: "{{ .Values.ingress.rateLimit.rps }}"
+    nginx.ingress.kubernetes.io/limit-rpm: "{{ .Values.ingress.rateLimit.rpm }}"
+    nginx.ingress.kubernetes.io/limit-connections: "{{ .Values.ingress.rateLimit.connections }}"
+    {{- if .Values.ingress.rateLimit.burst }}
+    nginx.ingress.kubernetes.io/limit-burst: "{{ .Values.ingress.rateLimit.burst }}"
+    {{- end }}
+    {{- if .Values.ingress.rateLimit.whitelist }}
+    nginx.ingress.kubernetes.io/whitelist-source-range: "{{ .Values.ingress.rateLimit.whitelist }}"
+    {{- end }}
+    {{- end }}
+    {{- if eq .Values.ingress.className "traefik" }}
+    # traefik middleware for rate limiting
+    traefik.ingress.kubernetes.io/router.middlewares: {{ .Values.deployment.namespace }}-rate-limit@kubernetescrd
+    {{- end }}
+    {{- end }}
+    {{- if .Values.ingress.tls }}
+    nginx.ingress.kubernetes.io/ssl-redirect: "{{ .Values.ingress.sslRedirect }}"
+    {{- end }}
+    {{- if .Values.ingress.nginxConfig }}
+    {{- range $key, $value := .Values.ingress.nginxConfig }}
+    {{ $key }}: "{{ $value }}"
+    {{- end }}
+    {{- end }}
+spec:
+  ingressClassName: {{ .Values.ingress.className }}
+  {{- if .Values.ingress.tls }}
+  tls:
+    - hosts:
+        {{- range .Values.ingress.hosts }}
+        - {{ .host }}
+        {{- end }}
+      {{- if .Values.ingress.tlsSecretName }}
+      secretName: {{ .Values.ingress.tlsSecretName }}
+      {{- end }}
+  {{- end }}
+  rules:
+    {{- range .Values.ingress.hosts }}
+    - host: {{ .host | default "*" }}
+      http:
+        paths:
+          {{- range .paths }}
+          - path: {{ .path }}
+            pathType: {{ .pathType | default "Prefix" }}
+            backend:
+              service:
+                name: {{ $.Values.service.name }}
+                port:
+                  number: {{ $.Values.service.port }}
+          {{- end }}
+    {{- end }}
+{{- end }}
+

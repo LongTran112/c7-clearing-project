@@ -1,4 +1,3 @@
-# Application settings
 app:
   name: trade-engine
   image:
@@ -6,27 +5,51 @@ app:
     tag: v1
     pullPolicy: Always
 
-# Deployment settings
 deployment:
   replicas: 1
   namespace: default
 
-# Service settings
 service:
   name: trade-engine-service
-  type: NodePort
+  type: NodePort # switch to ClusterIP if using ingress
   port: 8080
   targetPort: 8080
   nodePort: 30080
 
-# ServiceMonitor settings
 servicemonitor:
   enabled: true
   name: trade-engine-monitor
-  namespace: monitoring
+  namespace: monitoring # where prometheus lives
   release: main-monitoring
   path: /actuator/prometheus
   interval: 15s
   namespaceSelector:
     - default
 
+ingress:
+  enabled: false # flip to true when ready
+  className: nginx # or "traefik" if on K3s
+
+  rateLimit:
+    enabled: true
+    rps: "10" # 10 req/sec per IP seems reasonable
+    rpm: "100"
+    connections: "10"
+    burst: "20" # allow some burst traffic
+    whitelist: "" # add trusted IPs here if needed
+
+  hosts:
+    - host: trade-engine.example.com # update this
+      paths:
+        - path: /
+          pathType: Prefix
+
+  tls: false
+  tlsSecretName: trade-engine-tls
+  sslRedirect: true
+
+  # extra nginx stuff if you need it
+  nginxConfig: {}
+  # nginxConfig:
+  #   nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+  #   nginx.ingress.kubernetes.io/proxy-read-timeout: "60"

@@ -1,0 +1,13 @@
+{{- if and .Values.ingress.enabled (eq .Values.ingress.className "traefik") .Values.ingress.rateLimit.enabled }}
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: rate-limit
+  namespace: {{ .Values.deployment.namespace }}
+spec:
+  rateLimit:
+    average: {{ .Values.ingress.rateLimit.rpm | int | div 60 | default 100 }}
+    period: 1m
+    burst: {{ .Values.ingress.rateLimit.burst | default 50 }}
+{{- end }}
+
