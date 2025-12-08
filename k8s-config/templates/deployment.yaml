@@ -17,5 +17,26 @@ spec:
       - name: {{ .Values.app.name }}
         image: "{{ .Values.app.image.repository }}:{{ .Values.app.image.tag }}"
         imagePullPolicy: {{ .Values.app.image.pullPolicy }}
+        {{- if .Values.deployment.resources }}
+        resources:
+          {{- if .Values.deployment.resources.requests }}
+          requests:
+            {{- if .Values.deployment.resources.requests.cpu }}
+            cpu: {{ .Values.deployment.resources.requests.cpu }}
+            {{- end }}
+            {{- if .Values.deployment.resources.requests.memory }}
+            memory: {{ .Values.deployment.resources.requests.memory }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.deployment.resources.limits }}
+          limits:
+            {{- if .Values.deployment.resources.limits.cpu }}
+            cpu: {{ .Values.deployment.resources.limits.cpu }}
+            {{- end }}
+            {{- if .Values.deployment.resources.limits.memory }}
+            memory: {{ .Values.deployment.resources.limits.memory }}
+            {{- end }}
+          {{- end }}
+        {{- end }}
         ports:
         - containerPort: {{ .Values.service.targetPort }}
