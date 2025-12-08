@@ -1,0 +1,32 @@
+# Application settings
+app:
+  name: trade-engine
+  image:
+    repository: longtran112/trade-engine
+    tag: v1
+    pullPolicy: Always
+
+# Deployment settings
+deployment:
+  replicas: 1
+  namespace: default
+
+# Service settings
+service:
+  name: trade-engine-service
+  type: NodePort
+  port: 8080
+  targetPort: 8080
+  nodePort: 30080
+
+# ServiceMonitor settings
+servicemonitor:
+  enabled: true
+  name: trade-engine-monitor
+  namespace: monitoring
+  release: main-monitoring
+  path: /actuator/prometheus
+  interval: 15s
+  namespaceSelector:
+    - default
+
