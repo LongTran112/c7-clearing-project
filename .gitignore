@@ -1,0 +1,28 @@
+# Ignore .txt, .sh, .md files
+*.txt
+*.sh
+*.md
+
+# Keep important documentation and scripts
+!README.md
+!**/*README.md
+!**/*TESTING.md
+!**/*HELP.md
+!**/*README_TERRAFORM.md
+!**/*test-local.sh
+
+# Common ignores
+.DS_Store
+*.log
+*.tmp
+*.swp
+*~
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+Thumbs.db
+
