@@ -34,7 +34,7 @@ servicemonitor:
     - default
 
 ingress:
-  enabled: false # flip to true when ready
+  enabled: true # flip to true when ready
   className: nginx # or "traefik" if on K3s
 
   rateLimit:
