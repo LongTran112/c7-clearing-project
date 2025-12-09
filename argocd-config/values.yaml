@@ -1,0 +1,61 @@
+global:
+  image:
+    tag: v2.11.7
+
+configs:
+  params:
+    # limit concurrent git operations (prevents disk issues)
+    reposerver.parallelism.limit: 2
+
+controller:
+  resources:
+    limits:
+      cpu: "1000m"
+      memory: "1Gi"
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+
+repoServer:
+  resources:
+    limits:
+      cpu: "1000m"
+      memory: "512Mi"
+    requests:
+      cpu: "50m"
+      memory: "64Mi"
+
+server:
+  service:
+    type: NodePort
+    nodePortHttp: 32674
+    nodePortHttps: 30000
+  # Optional: enable ingress if you want to use Traefik
+  # ingress:
+  #   enabled: true
+  #   ingressClassName: traefik
+  #   hosts:
+  #     - argocd.example.com
+  #   tls:
+  #     - secretName: argocd-tls
+  #       hosts:
+  #         - argocd.example.com
+
+# Optional: configure other components
+dex:
+  resources:
+    limits:
+      cpu: "500m"
+      memory: "256Mi"
+    requests:
+      cpu: "50m"
+      memory: "64Mi"
+
+redis:
+  resources:
+    limits:
+      cpu: "500m"
+      memory: "256Mi"
+    requests:
+      cpu: "50m"
+      memory: "64Mi"

@@ -1,0 +1,33 @@
+# Advanced: Multi-source Application (ArgoCD v2.6+)
+# This uses Helm chart from Helm repo + values from Git
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd-self-managed
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  sources:
+    - repoURL: https://argoproj.github.io/argo-helm
+      chart: argo-cd
+      targetRevision: 7.x
+      helm:
+        releaseName: argocd
+    - repoURL: https://github.com/LongTran112/c7-clearing-project.git
+      targetRevision: development
+      ref: values
+      helm:
+        valueFiles:
+          - argocd-config/values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
