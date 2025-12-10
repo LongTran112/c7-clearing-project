@@ -51,6 +51,7 @@ ingress:
       paths:
         - path: /
           pathType: Prefix
+     # Remove the "*" catch-all for security in production
     - host: "*" # default catch-all (works with IP access)
       paths:
         - path: /
