@@ -37,7 +37,9 @@ spec:
   tls:
     - hosts:
         {{- range .Values.ingress.hosts }}
+        {{- if ne .host "*" }}
         - {{ .host }}
+        {{- end }}
         {{- end }}
       {{- if .Values.ingress.tlsSecretName }}
       secretName: {{ .Values.ingress.tlsSecretName }}
@@ -45,7 +47,8 @@ spec:
   {{- end }}
   rules:
     {{- range .Values.ingress.hosts }}
-    - host: {{ .host | default "*" }}
+    {{- if ne .host "*" }}
+    - host: {{ .host }}
       http:
         paths:
           {{- range .paths }}
@@ -57,6 +60,20 @@ spec:
                 port:
                   number: {{ $.Values.service.port }}
           {{- end }}
+    {{- else }}
+    # Default rule (no host specified) - matches any host
+    - http:
+        paths:
+          {{- range .paths }}
+          - path: {{ .path }}
+            pathType: {{ .pathType | default "Prefix" }}
+            backend:
+              service:
+                name: {{ $.Values.service.name }}
+                port:
+                  number: {{ $.Values.service.port }}
+          {{- end }}
+    {{- end }}
     {{- end }}
 {{- end }}
 

@@ -18,10 +18,11 @@ deployment:
 
 service:
   name: trade-engine-service
-  type: NodePort # switch to ClusterIP if using ingress
+  type: ClusterIP # Use ClusterIP when ingress is enabled (more secure)
   port: 8080
   targetPort: 8080
-  nodePort: 30080
+  # nodePort not needed with ClusterIP
+  # nodePort: 30080
 
 servicemonitor:
   enabled: true
@@ -39,14 +40,18 @@ ingress:
 
   rateLimit:
     enabled: true
-    rps: "5" # 5 req/sec per IP (more restrictive)
-    rpm: "50" # 50 req/min per IP
-    connections: "5" # 5 concurrent connections per IP
-    burst: "10" # allow some burst traffic
+    rps: "2" # 2 req/sec per IP (very restrictive - easy to trigger)
+    rpm: "20" # 20 req/min per IP
+    connections: "3" # 3 concurrent connections per IP
+    burst: "5" # small burst allowance
     whitelist: "" # add trusted IPs here if needed
 
   hosts:
-    - host: trade-engine.example.com # update this
+    - host: trade-engine.example.com # specific hostname
+      paths:
+        - path: /
+          pathType: Prefix
+    - host: "*" # default catch-all (works with IP access)
       paths:
         - path: /
           pathType: Prefix
