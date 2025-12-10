@@ -39,10 +39,10 @@ ingress:
 
   rateLimit:
     enabled: true
-    rps: "10" # 10 req/sec per IP seems reasonable
-    rpm: "100"
-    connections: "10"
-    burst: "20" # allow some burst traffic
+    rps: "5" # 5 req/sec per IP (more restrictive)
+    rpm: "50" # 50 req/min per IP
+    connections: "5" # 5 concurrent connections per IP
+    burst: "10" # allow some burst traffic
     whitelist: "" # add trusted IPs here if needed
 
   hosts:
