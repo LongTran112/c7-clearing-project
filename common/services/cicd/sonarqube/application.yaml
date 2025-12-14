@@ -16,6 +16,7 @@ spec:
       values: |
         # NOTE: SonarQube is resource/storage heavy.
         # You will likely need a default StorageClass and enough CPU/RAM.
+        edition: developer
         monitoringPasscode: "sonarqube-monitoring-passcode-2024"
         service:
           type: ClusterIP
