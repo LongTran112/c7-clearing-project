@@ -15,12 +15,11 @@ spec:
       targetRevision: 7.x
       helm:
         releaseName: argocd
+        valueFiles:
+          - $values/bootstrap/cicd/argocd/values.yaml
     - repoURL: https://github.com/LongTran112/c7-clearing-project.git
       targetRevision: development
       ref: values
-      helm:
-        valueFiles:
-          - argocd-config/values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd

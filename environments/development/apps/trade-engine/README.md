@@ -11,19 +11,22 @@ Quick reference for deploying the trade engine app.
 ## Quick Start
 
 ```bash
-helm install trade-engine ./k8s-config
+# from repo root:
+helm install trade-engine ./environments/development/apps/trade-engine
 ```
 
 With custom values:
 
 ```bash
-helm install trade-engine ./k8s-config -f custom-values.yaml
+# from repo root:
+helm install trade-engine ./environments/development/apps/trade-engine -f custom-values.yaml
 ```
 
 Enable ingress:
 
 ```bash
-helm install trade-engine ./k8s-config \
+# from repo root:
+helm install trade-engine ./environments/development/apps/trade-engine \
   --set ingress.enabled=true \
   --set ingress.hosts[0].host=your-domain.com \
   --set ingress.rateLimit.rps=20
@@ -53,7 +56,8 @@ ingress:
 Switch to ClusterIP when using ingress:
 
 ```bash
-helm upgrade trade-engine ./k8s-config \
+# from repo root:
+helm upgrade trade-engine ./environments/development/apps/trade-engine \
   --set service.type=ClusterIP \
   --set ingress.enabled=true
 ```
@@ -109,7 +113,8 @@ rateLimit:
 Upgrade:
 
 ```bash
-helm upgrade trade-engine ./k8s-config
+# from repo root:
+helm upgrade trade-engine ./environments/development/apps/trade-engine
 ```
 
 Uninstall:

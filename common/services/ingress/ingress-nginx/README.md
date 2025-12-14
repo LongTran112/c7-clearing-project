@@ -51,3 +51,6 @@ kubectl get svc ingress-nginx-controller -n ingress-nginx
 - Changes to application.yaml will auto-sync
 - Once installed, your trade-engine ingress will get an address and rate limiting will work
 
+
+
+
