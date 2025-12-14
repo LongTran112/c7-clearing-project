@@ -13,6 +13,8 @@ spec:
     targetRevision: 1.7.0
     helm:
       releaseName: vpa
+      values: |
+        installCRDs: true
   destination:
     server: https://kubernetes.default.svc
     namespace: vpa-system
