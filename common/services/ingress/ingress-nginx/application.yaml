@@ -16,7 +16,9 @@ spec:
       values: |
         controller:
           service:
-            type: LoadBalancer
+            # K3s on a single VM typically has no cloud LoadBalancer controller.
+            # Use NodePort by default; switch to LoadBalancer if you install MetalLB.
+            type: NodePort
           # Optional: set resource limits
           resources:
             limits:
