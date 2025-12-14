@@ -16,6 +16,7 @@ spec:
       interval: {{ .Values.servicemonitor.interval }}
   namespaceSelector:
     matchNames:
+      - {{ .Release.Namespace }}
       {{- range .Values.servicemonitor.namespaceSelector }}
       - {{ . }}
       {{- end }}

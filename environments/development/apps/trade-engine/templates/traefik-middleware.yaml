@@ -3,7 +3,7 @@ apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
   name: rate-limit
-  namespace: {{ .Values.deployment.namespace }}
+  namespace: {{ .Release.Namespace }}
 spec:
   rateLimit:
     average: {{ .Values.ingress.rateLimit.rpm | int | div 60 | default 100 }}
