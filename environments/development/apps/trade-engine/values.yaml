@@ -18,16 +18,14 @@ deployment:
 
 service:
   name: trade-engine-service
-  type: ClusterIP # Use ClusterIP when ingress is enabled (more secure)
+  type: ClusterIP
   port: 8080
   targetPort: 8080
-  # nodePort not needed with ClusterIP
-  # nodePort: 30080
 
 servicemonitor:
   enabled: true
   name: trade-engine-monitor
-  namespace: monitoring # where prometheus lives
+  namespace: monitoring
   release: main-monitoring
   path: /actuator/prometheus
   interval: 15s
@@ -35,24 +33,24 @@ servicemonitor:
     - default
 
 ingress:
-  enabled: true # flip to true when ready
-  className: nginx # or "traefik" if on K3s
+  enabled: true
+  className: nginx
 
   rateLimit:
     enabled: true
-    rps: "2" # 2 req/sec per IP (very restrictive - easy to trigger)
-    rpm: "20" # 20 req/min per IP
-    connections: "3" # 3 concurrent connections per IP
-    burst: "5" # small burst allowance
-    whitelist: "" # add trusted IPs here if needed
+    rps: "2"
+    rpm: "20"
+    connections: "3"
+    burst: "5"
+    whitelist: ""
 
   hosts:
-    - host: trade-engine.example.com # specific hostname
+    - host: trade-engine.example.com
       paths:
         - path: /
           pathType: Prefix
-     # Remove the "*" catch-all for security in production
-    - host: "*" # default catch-all (works with IP access)
+    # Remove the "*" catch-all for security in production
+    - host: "*"
       paths:
         - path: /
           pathType: Prefix
@@ -61,8 +59,4 @@ ingress:
   tlsSecretName: trade-engine-tls
   sslRedirect: true
 
-  # extra nginx stuff if you need it
   nginxConfig: {}
-  # nginxConfig:
-  #   nginx.ingress.kubernetes.io/proxy-body-size: "10m"
-  #   nginx.ingress.kubernetes.io/proxy-read-timeout: "60"

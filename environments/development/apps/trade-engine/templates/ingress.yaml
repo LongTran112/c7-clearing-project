@@ -7,7 +7,6 @@ metadata:
   annotations:
     {{- if .Values.ingress.rateLimit.enabled }}
     {{- if eq .Values.ingress.className "nginx" }}
-    # nginx rate limiting
     nginx.ingress.kubernetes.io/limit-rps: "{{ .Values.ingress.rateLimit.rps }}"
     nginx.ingress.kubernetes.io/limit-rpm: "{{ .Values.ingress.rateLimit.rpm }}"
     nginx.ingress.kubernetes.io/limit-connections: "{{ .Values.ingress.rateLimit.connections }}"
@@ -19,7 +18,6 @@ metadata:
     {{- end }}
     {{- end }}
     {{- if eq .Values.ingress.className "traefik" }}
-    # traefik middleware for rate limiting
     traefik.ingress.kubernetes.io/router.middlewares: {{ .Release.Namespace }}-rate-limit@kubernetescrd
     {{- end }}
     {{- end }}
@@ -61,7 +59,6 @@ spec:
                   number: {{ $.Values.service.port }}
           {{- end }}
     {{- else }}
-    # Default rule (no host specified) - matches any host
     - http:
         paths:
           {{- range .paths }}

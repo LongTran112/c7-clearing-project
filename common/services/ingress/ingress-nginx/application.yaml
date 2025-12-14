@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://kubernetes.github.io/ingress-nginx
     chart: ingress-nginx
-    targetRevision: 4.10.0 # Latest stable version
+    targetRevision: 4.10.0
     helm:
       releaseName: ingress-nginx
       values: |
@@ -19,7 +19,6 @@ spec:
             # K3s on a single VM typically has no cloud LoadBalancer controller.
             # Use NodePort by default; switch to LoadBalancer if you install MetalLB.
             type: NodePort
-          # Optional: set resource limits
           resources:
             limits:
               cpu: 500m
