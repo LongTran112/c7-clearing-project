@@ -60,3 +60,6 @@ ingress:
   sslRedirect: true
 
   nginxConfig: {}
+
+secret:
+  name: my-app-secret

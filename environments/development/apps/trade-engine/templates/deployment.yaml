@@ -17,6 +17,11 @@ spec:
       - name: {{ .Values.app.name }}
         image: "{{ .Values.app.image.repository }}:{{ .Values.app.image.tag }}"
         imagePullPolicy: {{ .Values.app.image.pullPolicy }}
+        {{- if .Values.secret.name }}
+        envFrom:
+          - secretRef:
+              name: {{ .Values.secret.name }}
+        {{- end }}
         {{- if .Values.deployment.resources }}
         resources:
           {{- if .Values.deployment.resources.requests }}
