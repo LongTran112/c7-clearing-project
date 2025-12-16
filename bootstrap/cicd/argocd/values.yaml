@@ -30,6 +30,9 @@ server:
     type: NodePort
     nodePortHttp: 32674
     nodePortHttps: 30000
+  # Ensure pods carry the instance label so the service selector matches
+  podLabels:
+    app.kubernetes.io/instance: argocd
   # Optional: enable ingress if you want to use Traefik
   # ingress:
   #   enabled: true
